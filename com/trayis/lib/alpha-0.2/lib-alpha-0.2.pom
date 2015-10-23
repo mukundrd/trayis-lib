@@ -1,10 +1,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" 
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.trayis</groupId>
     <artifactId>lib</artifactId>
-    <version>alpha-0.1</version>
+    <version>alpha-0.2</version>
     <packaging>jar</packaging>
     <name>Trayis lib</name>
     <url>http://www.tryis.com</url>
@@ -47,6 +47,26 @@
             </exclusions>
         </dependency>
         <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.3.6</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-validator</groupId>
+            <artifactId>commons-validator</artifactId>
+            <version>1.4.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-beanutils</groupId>
+                    <artifactId>commons-beanutils</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>commons-digester</groupId>
+                    <artifactId>commons-digester</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
             <version>1.4.4</version>
@@ -58,9 +78,39 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.3.6</version>
+            <groupId>com.octo.captcha</groupId>
+            <artifactId>jcaptcha-all</artifactId>
+            <version>1.0-RC4</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-dbcp</groupId>
+                    <artifactId>commons-dbcp</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>concurrent</groupId>
+                    <artifactId>concurrent</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>xerces</groupId>
+                    <artifactId>xercesImpl</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>xerces</groupId>
+                    <artifactId>xmlParserAPIs</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>hsqldb</groupId>
+                    <artifactId>hsqldb</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>quartz</groupId>
+                    <artifactId>quartz</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.json</groupId>
@@ -122,10 +172,10 @@
                     <groupId>org.springframework</groupId>
                     <artifactId>spring-context</artifactId>
                 </exclusion>
-            	<exclusion>
+                <exclusion>
                     <groupId>org.springframework</groupId>
                     <artifactId>spring-aop</artifactId>
-	            </exclusion>
+                </exclusion>
             </exclusions>
         </dependency>
         <!-- Jersey + Spring begins -->
@@ -140,7 +190,7 @@
     </dependencies>
 
     <build>
-        <finalName>${project.artifactId}-${project.version}-${timestamp}</finalName>
+        <finalName>${project.artifactId}-${project.version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -150,35 +200,6 @@
                     <target>1.6</target>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>com.keyboardsamurais.maven</groupId>
-                <artifactId>maven-timestamp-plugin</artifactId>
-                <version>1.0</version>
-                <configuration>
-                    <propertyName>timestamp</propertyName>
-                    <timestampPattern>yyyy-MM-dd</timestampPattern>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>create</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <!--
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.3</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <serverId>ossrh</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                </configuration>
-            </plugin>
-            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
@@ -205,7 +226,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
+            <!-- <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jarsigner-plugin</artifactId>
                 <version>1.2</version>
@@ -228,76 +249,52 @@
                     <storepass>kksbkbt</storepass>
                     <keypass>kksbkbt</keypass>
                 </configuration>
+            </plugin> -->
+            <plugin>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.8.1</version>
+                <configuration>
+                    <altDeploymentRepository>internal.repo::default::file://${project.build.directory}/maven-repo</altDeploymentRepository>
+                </configuration>
             </plugin>
             <plugin>
-		        <artifactId>maven-deploy-plugin</artifactId>
-		        <version>2.8.1</version>
-		        <configuration>
-		            <altDeploymentRepository>internal.repo::default::file://${project.build.directory}/maven-repo</altDeploymentRepository>
-		        </configuration>
+                <groupId>com.github.github</groupId>
+                <artifactId>site-maven-plugin</artifactId>
+                <version>0.11</version>
+                <configuration>
+                    <message>Maven artifacts for ${project.version}</message>
+                    <noJekyll>true</noJekyll>
+                    <outputDirectory>${project.build.directory}/maven-repo</outputDirectory>
+                    <branch>refs/heads/maven-repo</branch>
+                    <includes>
+                        <include>**/*</include>
+                    </includes>
+                    <repositoryName>trayis-lib</repositoryName>
+                    <repositoryOwner>mukundrd</repositoryOwner>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>site</goal>
+                        </goals>
+                        <phase>site</phase>
+                    </execution>
+                </executions>
             </plugin>
-	        <plugin>
-				<groupId>com.github.github</groupId>
-				<artifactId>site-maven-plugin</artifactId>
-				<version>0.11</version>
-				<configuration>
-					<message>Maven artifacts for ${project.version}</message>
-					<noJekyll>true</noJekyll>
-					<outputDirectory>${project.build.directory}/maven-repo</outputDirectory>
-					<branch>refs/heads/maven-repo</branch>
-					<includes>
-						<include>**/*</include>
-					</includes>
-					<repositoryName>trayis-lib</repositoryName>
-					<repositoryOwner>mukundrd</repositoryOwner>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>site</goal>
-						</goals>
-						<phase>deploy</phase>
-					</execution>
-				</executions>
-			</plugin>
         </plugins>
     </build>
 
-	<properties>
-		<github.global.server>github</github.global.server>
-	</properties>
-	
-	<distributionManagement>
-	    <repository>
-	        <id>internal.repo</id>
-	        <name>Temporary Staging Repository</name>
-	        <url>file://${project.build.directory}/maven-repo</url>
-	    </repository>
-	</distributionManagement>
+    <properties>
+        <github.global.server>github</github.global.server>
+    </properties>
 
-    <!--
     <distributionManagement>
-		<repository>
-			<id>bit-bucket</id>
-			<name>Trayis Maven Web Lib</name>
-			<url>git:releases://git@bitbucket.org:trayismaven/web-lib.git</url>
-		</repository>
+        <repository>
+            <id>internal.repo</id>
+            <name>Temporary Staging Repository</name>
+            <url>file://${project.build.directory}/maven-repo</url>
+        </repository>
     </distributionManagement>
-
-	<repositories>
-		<repository>
-			<id>bit-bucket</id>
-			<name>Trayis Maven Web Lib</name>
-	        <releases>
-                <enabled>true</enabled>
-	        </releases>
-	        <snapshots>
-                <enabled>false</enabled>
-	        </snapshots>
-	        <url>https://api.bitbucket.org/1.0/repositories/trayismaven/web-lib/raw/raw</url>
-		</repository>
-	</repositories>
-	-->
 
     <licenses>
         <license>
@@ -314,13 +311,5 @@
             <organizationUrl>http://www.trayis.com</organizationUrl>
         </developer>
     </developers>
-
-    <!--
-    <scm>
-        <connection>scm:git:git@bitbucket.org:commonLibs/weblib.git</connection>
-        <developerConnection>scm:git:git@bitbucket.org:commonLibs/weblib.git</developerConnection>
-        <url>git@bitbucket.org:commonLibs/weblib.git</url>
-    </scm>
-    -->
 
 </project>

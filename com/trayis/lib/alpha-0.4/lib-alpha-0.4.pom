@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.trayis</groupId>
     <artifactId>lib</artifactId>
-    <version>alpha-0.3</version>
+    <version>alpha-0.4</version>
     <packaging>jar</packaging>
     <name>Trayis lib</name>
     <url>http://www.tryis.com</url>

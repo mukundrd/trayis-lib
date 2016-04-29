@@ -230,7 +230,7 @@
                 <artifactId>maven-deploy-plugin</artifactId>
                 <version>2.8.1</version>
                 <configuration>
-                    <altDeploymentRepository>internal.repo::default::file://${project.build.directory}/maven-repo</altDeploymentRepository>
+                    <altDeploymentRepository>internal.repo::default::file://${project.build.directory}/master</altDeploymentRepository>
                 </configuration>
             </plugin>
             <plugin>
@@ -240,12 +240,13 @@
                 <configuration>
                     <message>Maven artifacts for ${project.version}</message>
                     <noJekyll>true</noJekyll>
-                    <outputDirectory>${project.build.directory}/maven-repo</outputDirectory>
+                    <merge>true</merge>
+                    <outputDirectory>${project.build.directory}/master</outputDirectory>
                     <branch>refs/heads/master</branch>
                     <includes>
                         <include>**/*</include>
                     </includes>
-                    <repositoryName>trayis-lib</repositoryName>
+                    <repositoryName>trayis-repo</repositoryName>
                     <repositoryOwner>mukundrd</repositoryOwner>
                 </configuration>
                 <executions>
@@ -268,7 +269,7 @@
         <repository>
             <id>internal.repo</id>
             <name>Temporary Staging Repository</name>
-            <url>file://${project.build.directory}/maven-repo</url>
+            <url>file://${project.build.directory}/master</url>
         </repository>
     </distributionManagement>
 
